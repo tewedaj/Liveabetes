@@ -6,107 +6,116 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+ import React from 'react';
+ import type {Node} from 'react';
+ import {
+   ImageBackground,
+   SafeAreaView,
+   ScrollView,
+   StatusBar,
+   StyleSheet,
+   Text,
+   useColorScheme,
+   View,
+   TouchableOpacity,
+   Image,
+   TextInput
+ } from 'react-native';
+ import {
+   Colors,
+   DebugInstructions,
+   Header,
+   LearnMoreLinks,
+   ReloadInstructions,
+ } from 'react-native/Libraries/NewAppScreen';
+import Everything from './code/navigation.js';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  export default class Alls extends React.Component{
+ 
+   render(){
+   return(
+  
+  <Everything/>
+ 
+   
+   );
+   }
+ }
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+ 
+ 
+ const styles = StyleSheet.create({
+   footer:{
+     width: "100%",
+     height: 50,
+     backgroundColor:'lightgray',
+     position:'absolute',
+     bottom:0,
+     margin:0,
+     marginTop:-50,
+     justifyContent:'center',
+     flexDirection:'row',
+   },
+   allBody:{
+     flex:1,
+     width:"100%",
+     justifyContent:'center'
+   },
+   middleBody:{
+     width:"100%",
+     height:"90%",
+     backgroundColor:"white",
+    zIndex:50,
+     padding:0,
+     position:"relative",
+     top:0,
+   },
+   bigButton:{
+     borderColor:'black',
+     padding:20,
+     width:"90%",
+     height:200,
+     margin:20, 
+     borderRadius:15,
+     marginBottom:5,
+     borderColor:"black",
+     backgroundColor:"gray",
+   },
+   header:{
+     width:'100%',
+     flexDirection: 'row',
+     justifyContent: 'center',
+     alignItems: 'center',
+     height:70,
+     position:'absolute',
+     top:0,
+     zIndex:1,
+     elevation:1,
+     backgroundColor: '#00000000'
+     
+   },
+   labelForBigButton:{
+     fontSize:28,
+     color:"black",
+     fontWeight:"700",
+   },
+   searchBar:{
+     flex:1,
+     paddingTop: 10,
+     paddingRight: 10,
+     paddingBottom: 10,
+     paddingLeft: 5,
+     backgroundColor: 'lightgray',
+     color: '#424242',
+     borderRadius:25,
+     margin:10,
+     position:'relative',
+     zIndex:1,
+     elevation:3,
+    
+   }
+ 
+ });
+ 
+ 
+ 
