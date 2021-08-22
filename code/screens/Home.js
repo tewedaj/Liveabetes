@@ -25,12 +25,13 @@ import {
   import Icon2 from 'react-native-vector-icons/Entypo';
   import RegisterData from './popups/registerData.js';
   const screenWidth = Dimensions.get("window").width;
-
+  import IndividualDataLog from './popups/individualDataLog.js';
   export default class Home extends React.Component{
     constructor(){ 
         super()
         this.state={
           registerData: false,
+          displayIndividualDataLog: false,
         }
     }
 
@@ -45,6 +46,13 @@ import {
         ],
         legend: ["Glucose History"] // optional
       };
+
+      closePopup = () => {
+        this.setState({registerData:false});
+      }
+      closePopupIndividual =() => {
+        this.setState({displayIndividualDataLog:false})
+      }
        chartConfig = {
         backgroundGradientFrom: "gray",
         backgroundGradientFromOpacity: 1,
@@ -64,8 +72,11 @@ import {
         return(
             <View style={styles.all}>
               {this.state.registerData && 
-               <RegisterData />
+               <RegisterData close={()=>{this.closePopup()}} />
                 
+              }
+              {this.state.displayIndividualDataLog && 
+              <IndividualDataLog headerColor={this.state.individualDataLogHeaderColor} close={() => {this.closePopupIndividual()}}/>
               }
               <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'red'}}>
           <Icon2 name="drop" size={30} color={'red'} style={{alignSelf:'center'}} />
@@ -106,7 +117,9 @@ import {
     return "green";
   }}}
   onDataPointClick={(value) => {
-    console.log("Value: ", value)
+    console.log("Value: ", value.dataset.color)
+    var dotColor = value.dataset.data[value.dataset.index] < 70 ? "Blue" : value.dataset.data[value.dataset.index] >= 70 && value.dataset.data[value.dataset.index] <=180?  "green" : "yellow"; 
+    this.setState({displayIndividualDataLog: true,individualDataLogHeaderColor:dotColor})
   }}
   chartConfig={this.chartConfig}
   fromZero={true}
