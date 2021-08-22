@@ -22,13 +22,15 @@ import {
   } from "react-native-chart-kit";
   import { Dimensions } from "react-native";
   import Icon from 'react-native-vector-icons/FontAwesome';
+  import Icon2 from 'react-native-vector-icons/Entypo';
+  import RegisterData from './popups/registerData.js';
   const screenWidth = Dimensions.get("window").width;
 
   export default class Home extends React.Component{
     constructor(){ 
         super()
         this.state={
-
+          registerData: false,
         }
     }
 
@@ -61,6 +63,13 @@ import {
     render(){
         return(
             <View style={styles.all}>
+              {this.state.registerData && 
+               <RegisterData />
+                
+              }
+              <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'red'}}>
+          <Icon2 name="drop" size={30} color={'red'} style={{alignSelf:'center'}} />
+              </TouchableOpacity>
                        <ScrollView style={{position:'relative',top:0,left:0,width:'100%'}} contentContainerStyle={{alignItems:'center'}}>
                     <View style={{ flexDirection:'row',height:220,justifyContent:'center',flexWrap:'wrap',width:'100%'}}>
                 <TouchableOpacity style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
@@ -123,6 +132,9 @@ import {
 </View>
             </View>
             <View style={{width:'100%',height:200,backgroundColor:'#1E1E1E',width:'95%',margin:10}}>
+              <View style={{position:'relative',top:0,width:'100%',height:20,backgroundColor:'green'}}>
+                  <Text style={{color:'white',textAlign:'center'}}>Prediction of blood sugar now</Text>
+              </View>
             <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'white',textAlign:'center'}}>180</Text>
 
             </View>
