@@ -21,7 +21,7 @@ import {
     StackedBarChart
   } from "react-native-chart-kit";
   import { Dimensions } from "react-native";
-  import Icon from 'react-native-vector-icons/Octicons';
+  import Icon from 'react-native-vector-icons/FontAwesome';
   const screenWidth = Dimensions.get("window").width;
 
   export default class Home extends React.Component{
@@ -63,24 +63,24 @@ import {
             <View style={styles.all}>
                        <ScrollView style={{position:'relative',top:0,left:0,width:'100%'}} contentContainerStyle={{alignItems:'center'}}>
                     <View style={{ flexDirection:'row',height:220,justifyContent:'center',flexWrap:'wrap',width:'100%'}}>
-                <TouchableOpacity style={{width:"45%",height:200,backgroundColor:'#1E1E1E',margin:10,elevation:100,borderRadius:10}}> 
+                <TouchableOpacity style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
-                <Text style={{fontSize:13,textAlign:'center',color:'white'}}>Insuline To Carb Ratio</Text>
-                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'white',textAlign:'center'}}>10/1</Text>
-                <Text style={{fontSize:10,color:'white',textAlign:'center'}}>carb gram / insuline unit</Text>
+                <Text style={{fontSize:13,textAlign:'center',color:'black'}}>Insuline To Carb Ratio</Text>
+                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>10/1</Text>
+                <Text style={{fontSize:10,color:'black',textAlign:'center'}}>carb gram / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{width:"45%",height:200,backgroundColor:'#1E1E1E',margin:10,elevation:100,borderRadius:10}}> 
+                <TouchableOpacity style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
-                <Text style={{fontSize:13,textAlign:'center',color:'white'}}>Glucose To Insuline Ratio</Text>
-                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'white',textAlign:'center'}}>30/1</Text>
-                <Text style={{fontSize:10,color:'white',textAlign:'center'}}>mg/dl / insuline unit</Text>
+                <Text style={{fontSize:13,textAlign:'center',color:'black'}}>Glucose To Insuline Ratio</Text>
+                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>30/1</Text>
+                <Text style={{fontSize:10,color:'black',textAlign:'center'}}>mg/dl / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
             
              </View>
              
-            <View style={{width:'95%',height:440,backgroundColor:'lightgray',marginTop:8}}>
+            <View style={{width:'95%',height:450,backgroundColor:'lightgray',marginTop:-5}}>
               <ScrollView horizontal={true}> 
             <LineChart
   data={this.data}
@@ -105,18 +105,24 @@ import {
   bezier
 />  
 </ScrollView>
-<View style={{flexDirection:'column',width:'100%'}}>
-{/* <Icon name="primitive-dot" size={50} color="green" style={{borderRadius:2,borderColor:'black'}}/> */}
-<Text style={{fontSize:15,margin:5,color:'black'}}>Normal range of Glucose</Text>
-<Text style={{fontSize:15,margin:5,color:'black'}}>Low range of Glucose</Text>
-<Text style={{fontSize:15,margin:5,color:'black'}}>Heigh range of Glucose</Text>
-<Text style={{fontSize:15,margin:5,color:'black'}}>Exterimly Heigh range of Glucose</Text>
-
-
-
+<View style={{margin:5,flexDirection:'row',width:'100%'}}>
+<Icon name="dot-circle-o" size={20} color="blue" style={{borderRadius:2,borderColor:'black'}}/>
+<Text style={{fontSize:15,margin:5,marginTop:0,color:'gray'}}>Low range of Glucose</Text>
+</View>
+<View style={{margin:5,flexDirection:'row',width:'100%'}}>
+<Icon name="dot-circle-o" size={20} color="green" style={{borderRadius:2,borderColor:'black'}}/>
+<Text style={{fontSize:15,margin:5,marginTop:0,color:'gray'}}>Normal range of Glucose</Text>
+</View>
+<View style={{margin:5,flexDirection:'row',width:'100%'}}>
+<Icon name="dot-circle-o" size={20} color="yellow" style={{borderRadius:2,borderColor:'black'}}/>
+<Text style={{fontSize:15,margin:5,marginTop:0,color:'gray'}}>Heigh range of Glucose</Text>
+</View>
+<View style={{margin:5,flexDirection:'row',width:'100%'}}>
+<Icon name="dot-circle-o" size={20} color="red" style={{borderRadius:2,borderColor:'black'}}/>
+<Text style={{fontSize:15,margin:5,marginTop:0,color:'gray'}}>Extermily Heigh range of Glucose</Text>
 </View>
             </View>
-            <View style={{width:'100%',height:200,backgroundColor:'#1E1E1E',width:'95%',margin:20}}>
+            <View style={{width:'100%',height:200,backgroundColor:'#1E1E1E',width:'95%',margin:10}}>
             <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'white',textAlign:'center'}}>180</Text>
 
             </View>
