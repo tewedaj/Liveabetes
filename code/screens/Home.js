@@ -23,15 +23,22 @@ import {
   import { Dimensions } from "react-native";
   import Icon from 'react-native-vector-icons/FontAwesome';
   import Icon2 from 'react-native-vector-icons/Entypo';
+  
   import RegisterData from './popups/registerData.js';
   const screenWidth = Dimensions.get("window").width;
   import IndividualDataLog from './popups/individualDataLog.js';
+  import InsulineToCarbRatio from './popups/insulineToCarbRatio.js';
+  import GlucoseToInsulineRatio from './popups/glucoseToInsulineRatio.js'; 
   export default class Home extends React.Component{
     constructor(){ 
         super()
         this.state={
           registerData: false,
           displayIndividualDataLog: false,
+          insulineToCarbRatio: false,
+          GlucoseToCarbRatio:false,
+          sugerLevel: null,
+
         }
     }
 
@@ -47,11 +54,31 @@ import {
         legend: ["Glucose History"] // optional
       };
 
-      closePopup = () => {
-        this.setState({registerData:false});
+      closePopup = (popUpName) => {
+        if(popUpName == "InsulineToCarbRatio"){
+          this.setState({insulineToCarbRatio: false});
+        }else if(popUpName == "IndividualDataLog"){
+          this.setState({displayIndividualDataLog: false});
+        }else if(popUpName == "RegisterData"){
+
+          this.setState({registerData:false});
+        }else if(popUpName == "GlucoseToCarbRatio"){
+          this.setState({GlucoseToCarbRatio: false})
+        }
       }
       closePopupIndividual =() => {
         this.setState({displayIndividualDataLog:false})
+      }
+      ChooseHeaderColor = (sugerLevel) =>{
+        if(sugerLevel < 70){
+          return "blue";
+        }else if(sugerLevel >= 70 && sugerLevel <= 170){
+          return "green";
+        }else if(sugerLevel > 170){
+          return "red";
+        }
+        console.log("THIS IS THE VALUE");
+        return "red";
       }
        chartConfig = {
         backgroundGradientFrom: "gray",
@@ -72,27 +99,35 @@ import {
         return(
             <View style={styles.all}>
               {this.state.registerData && 
-               <RegisterData close={()=>{this.closePopup()}} />
+               <RegisterData close={()=>{this.closePopup("RegisterData")}} />
                 
               }
               {this.state.displayIndividualDataLog && 
-              <IndividualDataLog headerColor={this.state.individualDataLogHeaderColor} close={() => {this.closePopupIndividual()}}/>
+              <IndividualDataLog headerColor={this.state.individualDataLogHeaderColor} sugerLevel={this.state.sugerLevel} close={() => {this.closePopup("IndividualDataLog")}}/>
               }
-              <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'red'}}>
+
+              {this.state.insulineToCarbRatio &&
+                <InsulineToCarbRatio close={()=>{this.closePopup("InsulineToCarbRatio")}} />
+              }
+
+              {this.state.GlucoseToCarbRatio && 
+              <GlucoseToInsulineRatio close={()=>{this.closePopup("GlucoseToCarbRatio")}} />
+    }
+              <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'blue'}}>
           <Icon2 name="drop" size={30} color={'red'} style={{alignSelf:'center'}} />
               </TouchableOpacity>
                        <ScrollView style={{position:'relative',top:0,left:0,width:'100%'}} contentContainerStyle={{alignItems:'center'}}>
                     <View style={{ flexDirection:'row',height:220,justifyContent:'center',flexWrap:'wrap',width:'100%'}}>
-                <TouchableOpacity style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
+                <TouchableOpacity onPress={()=> {this.setState({insulineToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
-                <Text style={{fontSize:13,textAlign:'center',color:'black'}}>Insuline To Carb Ratio</Text>
+                <Text style={{fontSize:13,textAlign:'center',color:'lightgray',backgroundColor:'green'}}>Insuline To Carb Ratio</Text>
                 <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>10/1</Text>
                 <Text style={{fontSize:10,color:'black',textAlign:'center'}}>carb gram / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
+                <TouchableOpacity onPress={() => {this.setState({GlucoseToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
-                <Text style={{fontSize:13,textAlign:'center',color:'black'}}>Glucose To Insuline Ratio</Text>
+                <Text style={{fontSize:13,textAlign:'center',color:'white',backgroundColor:'green'}}>Glucose To Insuline Ratio</Text>
                 <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>30/1</Text>
                 <Text style={{fontSize:10,color:'black',textAlign:'center'}}>mg/dl / insuline unit</Text>
                 </View>
@@ -117,9 +152,9 @@ import {
     return "green";
   }}}
   onDataPointClick={(value) => {
-    console.log("Value: ", value.dataset.color)
-    var dotColor = value.dataset.data[value.dataset.index] < 70 ? "Blue" : value.dataset.data[value.dataset.index] >= 70 && value.dataset.data[value.dataset.index] <=180?  "green" : "yellow"; 
-    this.setState({displayIndividualDataLog: true,individualDataLogHeaderColor:dotColor})
+    var dotColor = "";
+    dotColor = this.ChooseHeaderColor(value.dataset.data[value.index]);
+    this.setState({displayIndividualDataLog: true,individualDataLogHeaderColor:dotColor, sugerLevel: value.dataset.data[value.index]})
   }}
   chartConfig={this.chartConfig}
   fromZero={true}
@@ -144,11 +179,14 @@ import {
 <Text style={{fontSize:15,margin:5,marginTop:0,color:'gray'}}>Extermily Heigh range of Glucose</Text>
 </View>
             </View>
-            <View style={{width:'100%',height:200,backgroundColor:'#1E1E1E',width:'95%',margin:10}}>
+            <View style={{width:'100%',height:150,backgroundColor:'darkgray',width:'95%',margin:10}}>
               <View style={{position:'relative',top:0,width:'100%',height:20,backgroundColor:'green'}}>
                   <Text style={{color:'white',textAlign:'center'}}>Prediction of blood sugar now</Text>
               </View>
             <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'white',textAlign:'center'}}>180</Text>
+
+            </View>
+            <View style={{height:100}}>
 
             </View>
             </ScrollView>
