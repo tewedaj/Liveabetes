@@ -46,11 +46,11 @@ import {
                 <View style={{flexDirection:'row',height:120,margin:7,position:'relative',top:0,justifyContent:'center'}}>
                  <View style={{width:'45%',height:'95%',backgroundColor:'gray',margin:8,flexDirection:'column',elevation:20}}>
                 <Text style={{fontSize:20,textAlign:'center',color:'lightgray'}}>Insuline</Text>
-                <TextInput style={{color:'lightgray',borderBottomWidth:1, width:'25%',alignSelf:'center',height:50,top:5,borderBottomColor:'lightgray',textAlign:'center',fontSize:25}}></TextInput>
+                <TextInput value={JSON.stringify(this.props.insuline)} style={{color:'lightgray',borderBottomWidth:1, width:'25%',alignSelf:'center',height:50,top:5,borderBottomColor:'lightgray',textAlign:'center',fontSize:25}}></TextInput>
                  </View>
                  <View style={{width:'45%',height:'95%',backgroundColor:'gray',margin:8,flexDirection:'column',elevation:20}}>
                 <Text style={{fontSize:20,textAlign:'center',color:'lightgray'}}>Carb</Text>
-                <TextInput style={{color:'lightgray',borderBottomWidth:1, width:'25%',alignSelf:'center',height:50,top:5,borderBottomColor:'lightgray',textAlign:'center',fontSize:25}}></TextInput>
+                <TextInput value={JSON.stringify(this.props.carb)} style={{color:'lightgray',borderBottomWidth:1, width:'25%',alignSelf:'center',height:50,top:5,borderBottomColor:'lightgray',textAlign:'center',fontSize:25}}></TextInput>
                  </View>
                 </View>
                <TouchableOpacity style={{width:'91%',height:100,backgroundColor:'darkgray',color:'lightgray',alignSelf:'center',top:12}}>

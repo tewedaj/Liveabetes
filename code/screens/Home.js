@@ -29,18 +29,90 @@ import {
   import IndividualDataLog from './popups/individualDataLog.js';
   import InsulineToCarbRatio from './popups/insulineToCarbRatio.js';
   import GlucoseToInsulineRatio from './popups/glucoseToInsulineRatio.js'; 
+  import {addDataToLocalDataBase,getData,getAllKeys} from '../dataManagement/localDataManager.js';
   export default class Home extends React.Component{
     constructor(){ 
         super()
-        this.state={
+        this.state= {
+          glucoseHistory:false,
+          glucoseToCarb:false,
+          insulineToCarb:false,
           registerData: false,
           displayIndividualDataLog: false,
           insulineToCarbRatio: false,
           GlucoseToCarbRatio:false,
+          glucoseToInsuline:false,
           sugerLevel: null,
-
+          insulineToCarbRatioData: {"insuline":"1","carb":"10"},
+          glucoseToInsulineRatioData :{"insuline":"1","glucose":30}
         }
+    } 
+
+
+   
+
+    //insulineToCarb
+    //glucoseToCarb
+    //glucoseHistory
+    //predictionOfBloodGlucose
+    
+    /*
+glucoseHistory = [
+  {timeStamp:null ,
+  bloodGlucoseLevel:null,
+  foodInCarbs:null,
+  foodInsuline:nulll,
+  correctionInsuline:null,
+  activitesDone:[""],
+  activitesToBeDone:[""],
+  predictionOfBloodGlucose:null,
+  }
+]
+
+    */
+ 
+async UNSAFE_componentWillMount(){
+  var keys = await getAllKeys();
+  console.log(keys);
+  //asigning first time
+  keys.forEach((key)=>{
+    if(key == "insulineToCarb"){
+      this.setState({insulineToCarb:true});
+    }else if(key == "glucoseToInsuline"){
+      this.setState({glucoseToInsuline:true});
+    }else if(key == 'glucoseHistory'){
+      this.setState({glucoseHistory:true});
     }
+
+  });
+
+  if(!this.state.insulineToCarb){
+     var insulineToCarbTemp = {insuline:1,carb:10};
+     insulineToCarbTemp = JSON.stringify(insulineToCarbTemp);
+    addDataToLocalDataBase("insulineToCarb",insulineToCarbTemp);
+  }
+  if(!this.state.glucoseToInsuline){
+    var GlucoseToInsulineRatioTemp = {insuline:1,glucose:30};
+     GlucoseToInsulineRatioTemp = JSON.stringify(GlucoseToInsulineRatioTemp);
+    addDataToLocalDataBase("glucoseToInsuline",GlucoseToInsulineRatioTemp);
+  }
+  if(!this.state.glucoseHistory){
+    
+    addDataToLocalDataBase("glucoseHistory","[]");
+  }
+  var registredInsulineToCarb = await getData("insulineToCarb");
+  registredInsulineToCarb = JSON.parse(registredInsulineToCarb);
+  this.setState({insulineToCarbRatioData: registredInsulineToCarb})
+
+  var registredGlucoseToInsuline = await getData("glucoseToInsuline");
+      registredGlucoseToInsuline = JSON.parse(registredGlucoseToInsuline);
+      this.setState({glucoseToInsulineRatioData: registredGlucoseToInsuline});
+}
+
+
+
+
+
 
      data = {
         labels: ["6:00am", "12:00 pm", "6:00 pm", "12:00 am", "6:00 am", "12:00 pm"],
@@ -107,7 +179,7 @@ import {
               }
 
               {this.state.insulineToCarbRatio &&
-                <InsulineToCarbRatio close={()=>{this.closePopup("InsulineToCarbRatio")}} />
+                <InsulineToCarbRatio insuline={this.state.insulineToCarbRatioData.insuline} carb={this.state.insulineToCarbRatioData.carb} close={()=>{this.closePopup("InsulineToCarbRatio")}} />
               }
 
               {this.state.GlucoseToCarbRatio && 
@@ -121,14 +193,14 @@ import {
                 <TouchableOpacity onPress={()=> {this.setState({insulineToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
                 <Text style={{fontSize:13,textAlign:'center',color:'lightgray',backgroundColor:'green'}}>Insuline To Carb Ratio</Text>
-                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>10/1</Text>
+                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>{this.state.insulineToCarbRatioData.carb +"/"+this.state.insulineToCarbRatioData.insuline}</Text>
                 <Text style={{fontSize:10,color:'black',textAlign:'center'}}>carb gram / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {this.setState({GlucoseToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
                 <Text style={{fontSize:13,textAlign:'center',color:'white',backgroundColor:'green'}}>Glucose To Insuline Ratio</Text>
-                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>30/1</Text>
+                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>{this.state.glucoseToInsulineRatioData.glucose +"/"+this.state.glucoseToInsulineRatioData.insuline}</Text>
                 <Text style={{fontSize:10,color:'black',textAlign:'center'}}>mg/dl / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
@@ -136,7 +208,9 @@ import {
              </View>
              
             <View style={{width:'95%',height:450,backgroundColor:'lightgray',marginTop:-5}}>
-              <ScrollView horizontal={true}> 
+              <ScrollView horizontal={true}    
+               ref={ref => {this.scrollView = ref}}
+              onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
             <LineChart
   data={this.data}
   width={900}
