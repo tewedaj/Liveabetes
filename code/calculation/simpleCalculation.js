@@ -22,20 +22,25 @@ export const calculateInsuline = (glucoseLevel,carbsTaken,activitiesToDo,insulin
        }
        if(carbsTaken > 0){
                if(foodInsuline > 0){
-                            var heaveyActivity = foodInsuline-2;
-                            var heaveyActivity2 = foodInsuline - 2;
-                    activitiesToDo.run == true ? foodInsuline -= 2 : "";
-                    activitiesToDo.walk == true ? foodInsuline-- : "";
-                    activitiesToDo.bus == true ? foodInsuline-- : "";
-                    activitiesToDo.bike == true ? foodInsuline -= 2 : "";
-                    activitiesToDo.sleep == true ? foodInsuline-- : ""; 
-                    }                   
+                          
+                    activitiesToDo.run == true ? foodInsuline >= 2? foodInsuline -= 2 : correctionInsuline >=2 ? correctionInsuline -= 2 : "" :"" ;
+                    activitiesToDo.walk == true ? foodInsuline >= 1? foodInsuline-- :correctionInsuline >=1 ? correctionInsuline--: "" : "";
+                    activitiesToDo.bus == true ? foodInsuline >= 1? foodInsuline-- :correctionInsuline >=1 ? correctionInsuline--: "" : "";
+                    activitiesToDo.bike == true ? foodInsuline >= 2? foodInsuline -= 2 : correctionInsuline >=2 ? correctionInsuline -= 2 : "" :"" ;
+                    activitiesToDo.sleep == true ? foodInsuline >= 1? foodInsuline-- :correctionInsuline >=1 ? correctionInsuline--: "" : "";
+                    }            
         }
         
 
-       return {"correctionInsuline": correctionInsuline,
-                "foodInsuline":foodInsuline,
-                "carbsNeededToJustifyActivity": foodInsuline };
+
+       return {"correctionInsuline": removeRepeatingDecimal(correctionInsuline),
+                "foodInsuline": removeRepeatingDecimal(foodInsuline),
+                "carbsNeededToJustifyActivity": removeRepeatingDecimal(foodInsuline) };
         
 
+}
+
+const removeRepeatingDecimal = (insulineLevel) => {
+       
+        return insulineLevel.toFixed(1);
 }

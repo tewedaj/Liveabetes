@@ -35,6 +35,7 @@ import {
         super()
         this.state= {
           glucoseHistory:false,
+          glucoseHistoryData: [],
           glucoseToCarb:false,
           insulineToCarb:false,
           registerData: false,
@@ -108,12 +109,30 @@ async UNSAFE_componentWillMount(){
   var registredGlucoseToInsuline = await getData("glucoseToInsuline");
       registredGlucoseToInsuline = JSON.parse(registredGlucoseToInsuline);
       this.setState({glucoseToInsulineRatioData: registredGlucoseToInsuline});
+
+  var glucoseHistory = await getData("glucoseHistory");
+      glucoseHistory = JSON.parse(glucoseHistory);
+      this.setState({glucoseHistoryData: glucoseHistory})
 }
 
 
 
   //1E1E1E
+  createAnArrayForTheGraph = (glucoseHistory) => {
+    var data = [];
+    var date = [];
+    glucoseHistory.forEach((recored,index)=>{
+      data[index] = recored.bloodGlucoseLevel,
+      date[index] = recored.timeStamp
+    });
+    return {"data": data,
+            "labels": date};
+  }
 
+  fetchMoreDataAboutRecored = (recoredIndex,glucoseHistory) => {
+
+    return glucoseHistory[recoredIndex];
+  }
 
      data = {
         labels: ["6:00am", "12:00 pm", "6:00 pm", "12:00 am", "6:00 am", "12:00 pm"],
@@ -172,7 +191,7 @@ async UNSAFE_componentWillMount(){
         return(
             <View style={styles.all}>
               {this.state.registerData && 
-               <RegisterData insulineToCarbRatio={this.state.insulineToCarbRatioData} GlucoseToCarbRatio={this.state.glucoseToInsulineRatioData} close={()=>{this.closePopup("RegisterData")}} />
+               <RegisterData glucoseHistory={this.state.glucoseHistoryData} insulineToCarbRatio={this.state.insulineToCarbRatioData} GlucoseToCarbRatio={this.state.glucoseToInsulineRatioData} close={()=>{this.closePopup("RegisterData")}} />
                 
               }
               {this.state.displayIndividualDataLog && 
@@ -186,29 +205,29 @@ async UNSAFE_componentWillMount(){
               {this.state.GlucoseToCarbRatio && 
               <GlucoseToInsulineRatio close={()=>{this.closePopup("GlucoseToCarbRatio")}} />
     }
-              <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'blue'}}>
+              <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'black'}}>
           <Icon2 name="drop" size={30} color={'red'} style={{alignSelf:'center'}} />
               </TouchableOpacity>
                        <ScrollView style={{position:'relative',top:0,left:0,width:'100%'}} contentContainerStyle={{alignItems:'center'}}>
                     <View style={{ flexDirection:'row',height:220,justifyContent:'center',flexWrap:'wrap',width:'100%'}}>
-                <TouchableOpacity onPress={()=> {this.setState({insulineToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
+                <TouchableOpacity onPress={()=> {this.setState({insulineToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'#1E1E1E',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
-                <Text style={{fontSize:13,textAlign:'center',color:'lightgray',backgroundColor:'green'}}>Insuline To Carb Ratio</Text>
-                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>{this.state.insulineToCarbRatioData.carb +"/"+this.state.insulineToCarbRatioData.insuline}</Text>
-                <Text style={{fontSize:10,color:'black',textAlign:'center'}}>carb gram / insuline unit</Text>
+                <Text style={{fontSize:13,textAlign:'center',color:'#1E1E1E',backgroundColor:'green'}}>Insuline To Carb Ratio</Text>
+                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'gray',textAlign:'center'}}>{this.state.insulineToCarbRatioData.carb +"/"+this.state.insulineToCarbRatioData.insuline}</Text>
+                <Text style={{fontSize:10,color:'gray',textAlign:'center'}}>carb gram / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {this.setState({GlucoseToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'gray',margin:5,elevation:100,borderRadius:0}}> 
+                <TouchableOpacity onPress={() => {this.setState({GlucoseToCarbRatio:true})}} style={{width:"46%",height:200,backgroundColor:'#1E1E1E',margin:5,elevation:100,borderRadius:0}}> 
                 <View>
-                <Text style={{fontSize:13,textAlign:'center',color:'white',backgroundColor:'green'}}>Glucose To Insuline Ratio</Text>
-                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'lightgray',textAlign:'center'}}>{this.state.glucoseToInsulineRatioData.glucose +"/"+this.state.glucoseToInsulineRatioData.insuline}</Text>
-                <Text style={{fontSize:10,color:'black',textAlign:'center'}}>mg/dl / insuline unit</Text>
+                <Text style={{fontSize:13,textAlign:'center',color:'#1E1E1E',backgroundColor:'green'}}>Glucose To Insuline Ratio</Text>
+                <Text style={{fontSize:60,margin:20,fontWeight:"100",color:'gray',textAlign:'center'}}>{this.state.glucoseToInsulineRatioData.glucose +"/"+this.state.glucoseToInsulineRatioData.insuline}</Text>
+                <Text style={{fontSize:10,color:'gray',textAlign:'center'}}>mg/dl / insuline unit</Text>
                 </View>
                 </TouchableOpacity>
             
              </View>
              
-            <View style={{width:'95%',height:450,backgroundColor:'lightgray',marginTop:-5}}>
+            <View style={{width:'95%',height:450,backgroundColor:'#1E1E1E',marginTop:-5}}>
               <ScrollView horizontal={true}    
                ref={ref => {this.scrollView = ref}}
               onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
@@ -254,7 +273,7 @@ async UNSAFE_componentWillMount(){
 <Text style={{fontSize:15,margin:5,marginTop:0,color:'gray'}}>Extermily Heigh range of Glucose</Text>
 </View>
             </View>
-            <View style={{width:'100%',height:150,backgroundColor:'darkgray',width:'95%',margin:10}}>
+            <View style={{width:'100%',height:150,backgroundColor:'#1E1E1E',width:'95%',margin:10}}>
               <View style={{position:'relative',top:0,width:'100%',height:20,backgroundColor:'green'}}>
                   <Text style={{color:'white',textAlign:'center'}}>Prediction of blood sugar now</Text>
               </View>

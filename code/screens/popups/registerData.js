@@ -45,6 +45,7 @@ import {
             glucoseLevel: 0,
             correctionInsuline: 0,
             carbsTaken:0,
+            glucoseHistory:[],
       
           }
       }
@@ -86,26 +87,26 @@ import {
 
       }
       
-      glucoseHistory = [
-        {"timeStamp":new Date() ,
-        "bloodGlucoseLevel":100,
-        "foodInCarbs":100,
-        "foodInsuline":100,
-        "correctionInsuline":100,
-        "activitesDone":["walking"],
-        "activitesToBeDone":["walking"],
-        "predictionOfBloodGlucose":180,
-        "carbsNeededToJustifyActivity": 10 
-        }
-      ]
+      // glucoseHistory = [
+      //   {"timeStamp":new Date() ,
+      //   "bloodGlucoseLevel":100,
+      //   "foodInCarbs":100,
+      //   "foodInsuline":100,
+      //   "correctionInsuline":100,
+      //   "activitesDone":["walking"],
+      //   "activitesToBeDone":["walking"],
+      //   "predictionOfBloodGlucose":180,
+      //   "carbsNeededToJustifyActivity": 10 
+      //   }
+      // ]
 
       glucoseHistoryData = (self) => {
         
         var glucoseHistory = {"timeStamp":new Date(),
                               "bloodGlucoseLevel": self.state.glucoseLevel,
                               "foodInCarbs": self.state.foodInCarbs,
-                              "foodInsuline": self.state.foodInCarbs,
-                              "correctionInsuline": self.state.correctionInsuline,
+                              "foodInsuline": self.state.insuline.foodInCarbs,
+                              "correctionInsuline": self.state.insuline.correctionInsuline,
                               "activitesDone": {"walk":self.state.walking
                               ,"run":self.state.running
                               ,"bus":self.state.takeabus
@@ -118,31 +119,28 @@ import {
                 return glucoseHistory;
       }
 
-      createAnArrayForTheGraph = (glucoseHistory) => {
-        var data = [];
-        var date = [];
-        glucoseHistory.forEach((recored,index)=>{
-          data[index] = recored.bloodGlucoseLevel,
-          date[index] = recored.timeStamp
-        })
-      }
-
-      fetchMoreDataAboutRecored = (recoredIndex,glucoseHistory) => {
-
-        return glucoseHistory[recoredIndex];
-      }
+      
 
       addToArray = (prevArray,newData)=> {
-        var newArray = [...prevArray,newData];
+        console.log('THE DATA: ', prevArray);
+        var newArray = this.state.glucoseHistory;
+        newArray.push(newData);
+      //  prevArray.push(newData)
+      this.setState({glucoseHistory: newArray})
         return newArray;
       }
+async UNSAFE_componentWillMount(){
+  var glucoseHistory = await getData("glucoseHistory");
+      glucoseHistory = JSON.parse(glucoseHistory);
+      this.setState({glucoseHistory: glucoseHistory});
+}
 
 
       render(){
         console.log(this.props);
           return(
-            <View style={{position:'absolute',zIndex:500,elevation:400, width:'100%',height:'100%',backgroundColor:'rgba(54,54,54,0.4)',alignItems:'center',top:0,left:0}}>
-                <View style={{backgroundColor:'white',width:'80%',height:'70%',alignSelf:'center',top:"10%",borderTopLeftRadius:10,borderTopRightRadius:10,overflow:'hidden'}}>
+            <View style={{position:'absolute',zIndex:500,elevation:400, width:'100%',height:'100%',backgroundColor:'rgba(54,54,54,0.8)',alignItems:'center',top:0,left:0}}>
+                <View style={{backgroundColor:'white',width:'80%',height:550,alignSelf:'center',top:"10%",borderTopLeftRadius:10,borderTopRightRadius:10,overflow:'hidden'}}>
                 <TouchableOpacity onPress={()=>this.props.close()} style={{top:5,right:10,position:'absolute',zIndex:600}}><Icon3 name={"closecircle"} size={23} color={'lightgray'} /></TouchableOpacity>
                 <View style={{width:'100%',height:40,backgroundColor:'green',flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                 <Icon2 name="drop" size={27} color={'lightgray'} style={{alignSelf:'center'}} />
@@ -235,7 +233,7 @@ import {
                   <Text style={{fontSize:20}}>{"Correction Insuline: " + this.state.insuline.correctionInsuline}</Text> 
                 </View>
 
-                <TouchableOpacity onPress={() => {getData("glucoseHistory").then((response) => {console.log(response)})}} style={{borderRadius:10, width:'90%',margin:15,backgroundColor:'green',alignItems:'center', padding:10,top:0}}>
+                <TouchableOpacity onPress={() => {console.log("........: ",this.glucoseHistoryData(this)),addDataToLocalDataBase("glucoseHistory",this.addToArray(this.state.glucoseHistory,this.glucoseHistoryData(this)))}} style={{borderRadius:10, width:'90%',margin:15,backgroundColor:'green',alignItems:'center', padding:10,top:0}}>
                   <Text style={{fontSize:20,textAlign:'center',color:'white'}}>{"Log Data"}</Text> 
                 </TouchableOpacity>
 
