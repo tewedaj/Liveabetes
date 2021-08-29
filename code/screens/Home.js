@@ -44,7 +44,7 @@ import {
           glucoseToInsuline:false,
           sugerLevel: null,
           insulineToCarbRatioData: {"insuline":"1","carb":"10"},
-          glucoseToInsulineRatioData :{"insuline":"1","glucose":30}
+          glucoseToInsulineRatioData:{"insuline":"1","glucose":30}
         }
     } 
 
@@ -66,6 +66,7 @@ glucoseHistory = [
   activitesDone:[""],
   activitesToBeDone:[""],
   predictionOfBloodGlucose:null,
+  carbsNeededToJustifyActivity: 
   }
 ]
 
@@ -111,7 +112,7 @@ async UNSAFE_componentWillMount(){
 
 
 
-
+  //1E1E1E
 
 
      data = {
@@ -171,7 +172,7 @@ async UNSAFE_componentWillMount(){
         return(
             <View style={styles.all}>
               {this.state.registerData && 
-               <RegisterData close={()=>{this.closePopup("RegisterData")}} />
+               <RegisterData insulineToCarbRatio={this.state.insulineToCarbRatioData} GlucoseToCarbRatio={this.state.glucoseToInsulineRatioData} close={()=>{this.closePopup("RegisterData")}} />
                 
               }
               {this.state.displayIndividualDataLog && 
