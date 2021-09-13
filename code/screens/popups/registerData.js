@@ -122,22 +122,21 @@ import {
       
 
       addToArray = (prevArray,newData)=> {
-        console.log('THE DATA: ', prevArray);
-        var newArray = this.state.glucoseHistory;
-        newArray.push(newData);
+        var newArray = [...prevArray,newData];
+        
       //  prevArray.push(newData)
       this.setState({glucoseHistory: newArray})
-        return newArray;
+        return JSON.stringify(newArray);
       }
 async UNSAFE_componentWillMount(){
   var glucoseHistory = await getData("glucoseHistory");
       glucoseHistory = JSON.parse(glucoseHistory);
+      console.log("THIS IS THE DATA ",glucoseHistory);
       this.setState({glucoseHistory: glucoseHistory});
 }
 
 
       render(){
-        console.log(this.props);
           return(
             <View style={{position:'absolute',zIndex:500,elevation:400, width:'100%',height:'100%',backgroundColor:'rgba(54,54,54,0.8)',alignItems:'center',top:0,left:0}}>
                 <View style={{backgroundColor:'white',width:'80%',height:550,alignSelf:'center',top:"10%",borderTopLeftRadius:10,borderTopRightRadius:10,overflow:'hidden'}}>
@@ -233,7 +232,7 @@ async UNSAFE_componentWillMount(){
                   <Text style={{fontSize:20}}>{"Correction Insuline: " + this.state.insuline.correctionInsuline}</Text> 
                 </View>
 
-                <TouchableOpacity onPress={() => {console.log("........: ",this.glucoseHistoryData(this)),addDataToLocalDataBase("glucoseHistory",this.addToArray(this.state.glucoseHistory,this.glucoseHistoryData(this)))}} style={{borderRadius:10, width:'90%',margin:15,backgroundColor:'green',alignItems:'center', padding:10,top:0}}>
+                <TouchableOpacity onPress={() => {console.log("........: ", this.state.glucoseHistory),addDataToLocalDataBase("glucoseHistory",this.addToArray(this.state.glucoseHistory,this.glucoseHistoryData(this))),this.props.updateGraph(), this.props.close() }} style={{borderRadius:10, width:'90%',margin:15,backgroundColor:'green',alignItems:'center', padding:10,top:0}}>
                   <Text style={{fontSize:20,textAlign:'center',color:'white'}}>{"Log Data"}</Text> 
                 </TouchableOpacity>
 

@@ -35,7 +35,7 @@ import {
       render(){
           return(
             <View style={{position:'absolute',zIndex:500,elevation:400, width:'100%',height:'100%',backgroundColor:'rgba(54,54,54,0.8)',alignItems:'center',top:0,left:0}}>
-              <View style={{backgroundColor:'white',width:'80%',height:'40%',alignSelf:'center',top:"20%",overflow:'hidden',elevation:30}}>
+              <View style={{backgroundColor:'white',width:'80%',height:320,alignSelf:'center',top:"20%",overflow:'hidden',elevation:30}}>
               <View style={{width:'100%',height:40,backgroundColor:'green',flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                 <Icon name="injection-syringe" size={30} color={'white'} style={{alignSelf:'center',padding:5}} />
                 <Text style={{fontSize:'white',fontSize:20,color:'white'}}>Insuline to carb</Text>
