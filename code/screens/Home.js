@@ -31,6 +31,9 @@ import {
   import InsulineToCarbRatio from './popups/insulineToCarbRatio.js';
   import GlucoseToInsulineRatio from './popups/glucoseToInsulineRatio.js'; 
   import {addDataToLocalDataBase,getData,getAllKeys} from '../dataManagement/localDataManager.js';
+  // import PushNotification, {Importance} from 'react-native-push-notification';
+  import PushNotification from 'react-native-push-notification';
+
 import { createIconSetFromFontello } from 'react-native-vector-icons';
   export default class Home extends React.Component{
     constructor(){ 
@@ -332,6 +335,19 @@ updateGraph = () => {
           stroke: "#ffa726"
         }
       };
+
+      handleNotification = () =>{
+        PushNotification.localNotification({
+              channelId: 'test-channel',
+              title: "this is a test",
+              message: "ok this is the meassage so you better get your ass ready",
+              vibrate: true, // (optional) default: true
+              vibration: 300, 
+              visibility: 'public',
+              color:'red',
+        });
+      }
+
     render(){
         return(
             <View style={styles.all}>
@@ -350,7 +366,7 @@ updateGraph = () => {
               {this.state.GlucoseToCarbRatio && 
               <GlucoseToInsulineRatio close={()=>{this.closePopup("GlucoseToCarbRatio")}} />
     }
-              <TouchableOpacity onPress={() => {this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'black'}}>
+              <TouchableOpacity onPress={() => {this.handleNotification(), this.setState({registerData:true})}} style={{position:'absolute',justifyContent:'center',bottom:40,right:40,width:60,height:60,backgroundColor:'green',borderRadius:30,zIndex:200,borderWidth:2,borderColor:'black'}}>
           <Icon2 name="drop" size={30} color={'red'} style={{alignSelf:'center'}} />
               </TouchableOpacity>
                        <ScrollView style={{position:'relative',top:0,left:0,width:'100%'}} contentContainerStyle={{alignItems:'center'}}>
@@ -452,6 +468,7 @@ updateGraph = () => {
         );
     }
   }
+
 
   const styles = StyleSheet.create({
     all:{
